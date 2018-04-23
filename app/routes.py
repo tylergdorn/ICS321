@@ -37,5 +37,4 @@ def checkers():
 
 @app.route('/api/board', methods=['GET'])
 def get_board():
-    db.getBoardState()
-    return jsonify({'aa':'aaa?'})
+    return jsonify(db.getBoardState())
