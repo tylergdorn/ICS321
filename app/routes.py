@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, jsonify
 from app import app
 from app.forms import LoginForm
-from app import db
+from app.db import db
 
 @app.route('/')
 @app.route('/index')
@@ -37,4 +37,5 @@ def checkers():
 
 @app.route('/api/board', methods=['GET'])
 def get_board():
+    db.getBoardState()
     return jsonify({'aa':'aaa?'})

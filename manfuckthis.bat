@@ -1,0 +1,1 @@
+cd venv & cd Scripts & activate.bat & cd .. & cd .. & oraclesux.bat & powershell < pt2.ps1
