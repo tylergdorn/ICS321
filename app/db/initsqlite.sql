@@ -10,3 +10,11 @@ CREATE TABLE IF NOT EXISTS PIECES (
     king        NUMBER(1),
     CONSTRAINT team_color CHECK (color IN ('Red', 'Black'))
 );
+CREATE TABLE IF NOT EXISTS BOARD (
+    x         INT,
+    y         INT,
+    color       VARCHAR(10),
+    king        NUMBER(1),
+    PRIMARY KEY (x, y),
+    CONSTRAINT team_color CHECK (color IN ('Red', 'Black', 'None'))
+);

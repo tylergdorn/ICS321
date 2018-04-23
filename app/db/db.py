@@ -1,7 +1,11 @@
 from flask import jsonify
 import sqlite3
 
-conn = sqlite3.connect('db.db')
-
 def getBoardState():
-    cursor = conn.execute("SELECT * FROM ")
+    conn = get_db()
+    cursor = conn.execute("SELECT * FROM BOARD")
+    entries = cursor.fetchall()
+    for entry in entries:
+        print(entry)
+def get_db():
+    return sqlite3.connect('db.db')
