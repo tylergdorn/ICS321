@@ -7,10 +7,14 @@
 
 {% block content %}
     <table>
-    {% for i in range(1, 9) %}
+    {% for i in range(0, 8) %}
         <tr>
-            {% for j in range(1, 9) %}
-                <td id="{{ i ~ j }}"></td>
+            {% for j in range(0, 8) %}
+                {% if (i + j) % 2 != 0 %}
+                    <td class="clickabletd" id="{{ ((i * 8 + j) // 2) }}"></td>
+                {% else %}
+                    <td></td>
+                {% endif %}
             {% endfor %}
         </tr>
     {% endfor %}

@@ -1,6 +1,6 @@
 table tr td {
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
     border: solid #000 1px;
   }
   
@@ -10,3 +10,7 @@ table tr td {
   table tr:nth-child(even) td:nth-child(odd) {
     background: #000;
   }
+
+.selected {
+  color: red;
+}

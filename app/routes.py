@@ -41,7 +41,7 @@ def get_board():
 
 @app.route('/api/stats', methods=['GET'])
 def stats():
-    db.updatePosition(1, 3)
+    db.updatePosition(1, 19)
     return jsonify(db.getStats())
 
 @app.route('/api/move', methods=['POST', 'GET'])

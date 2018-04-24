@@ -11,6 +11,7 @@ def getBoardState():
     entries = cursor.fetchall()
     if len(entries) == 0: # if there isn't any entries, give sample data
         new_game()
+        return getBoardState()
     jsonData = {}
     entityArray = []
     for entry in entries: # build json for every entity
@@ -37,20 +38,33 @@ def new_game():
     for i in range(0, 32):
         template = Template('INSERT INTO BOARD VALUES (${i}, \'${color}\', 0)')
         color = 'Black'
-        if i <= 20 and i >= 12:
+        if i < 20 and i >= 12:
             color = 'None'
-        elif i <= 20:
+        elif i <= 12:
             color = 'Red'
         command = template.substitute(i = str(i), color = color)
         cur.execute(command)
         con.commit()
+    print("Started New Game")
 
 def getStats():
     """Returns all the stats of the current game as json"""
     con = get_db()
     cur = con.cursor()
     cur.execute("SELECT * FROM STATS")
-    return cur.fetchall()
+    temp = cur.fetchall()
+    return temp
+
+def validMove(start, end):
+    """Checks if a move is valid"""
+    if start > 31 or start < 0 or end > 31 or end < 0: # impossible gamestates
+        return False
+    boardState = getBoardState()
+    difference = abs(start - end)
+    if difference != 4 or difference != 5 or difference != 7 or difference != 9:
+        return False # these are the only differences that are legal move. multi-hop moves are considered non turn ending moves.
+    if difference < 5: # i.e. a hop over another piece
+        # if boardState.tiles[start]
 
 def updatePosition(start, end):
     """Moves a piece from start to end"""
@@ -58,11 +72,23 @@ def updatePosition(start, end):
     cur = con.cursor()
     t = Template("SELECT * FROM BOARD WHERE tile=${tile}")
     cur.execute(t.substitute(tile = start))
-    return cur.fetchall()
+    temp = cur.fetchall()
+    startTile = temp[0]
+    cur.execute(t.substitute(tile = end))
+    temp2 = cur.fetchall()
+    endTile = temp2[0]
+    print(startTile)
+    print(endTile)
+    if startTile[1] != 'None':
+        if endTile[1] == 'None':
+            print('gj')
+
 
 def clearGame():
     """Clears everything out of the board table"""
     conn = get_db()
     cur = conn.cursor()
     cur.execute("DELETE FROM BOARD")
+    conn.commit()
+    print("Deleted All tile info from Board")
 
