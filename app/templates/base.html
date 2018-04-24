@@ -13,13 +13,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <script type=text/javascript>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
+        {% block scripts %}
+        {% endblock %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
     </head>
     <body>
         <div>
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('statistics') }}">Statistics</a>
+            <a href="{{ url_for('checkers') }}">Checkers</a>
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}

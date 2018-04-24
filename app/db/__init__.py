@@ -2,12 +2,6 @@ import sqlite3
 
 from app.db import db
 
-x = db.get_db()
-y = x.cursor()
-# y.execute("INSERT INTO BOARD VALUES (27, 'Black', 0)")
-y.execute("SELECT * FROM BOARD")
-print(len(y.fetchall()))
-
 # conn.execute("SELECT TABLES LIKE 'STATS")
 # result = conn.fetchone()
 # if not result:

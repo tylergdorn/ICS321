@@ -38,3 +38,13 @@ def checkers():
 @app.route('/api/board', methods=['GET'])
 def get_board():
     return jsonify(db.getBoardState())
+
+@app.route('/api/stats', methods=['GET'])
+def stats():
+    db.updatePosition(1, 3)
+    return jsonify(db.getStats())
+
+@app.route('/api/move', methods=['POST', 'GET'])
+def move():
+    db.clearGame()
+    return jsonify("{'a':'a'}")
