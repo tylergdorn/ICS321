@@ -53,7 +53,16 @@ def stats():
 
 @app.route('/api/move', methods=['POST'])
 def move():
-    return(jsonify(True))
+    if request.method == 'POST':
+        start = request.values.get('start')
+        end = request.values.get('end')
+        if(start != None and end != None):
+            db.updatePosition(start, end)    
+            return jsonify(True)
+        else:
+            raise exceptions.InvalidUsage('Use the "start" and "end" parameter with a number', status_code=400)
+    else:
+        raise exceptions.InvalidUsage('Use the "start" and "end" parameter with a number', status_code=400)
 
 @app.route('/api/legal', methods=['POST', 'GET'])
 def legal():
