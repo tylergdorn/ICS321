@@ -5,7 +5,6 @@ const NORMAL = "fa-circle fa-5x";
 const RED = "far";
 const BLACK = "fas";
 
-
 function boardState(){
     var board;
     $.ajax({url: $SCRIPT_ROOT + '/api/board', success: function(result){

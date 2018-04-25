@@ -12,7 +12,7 @@ table tr td {
   }
 
 .selected {
-  color: red;
+  background-color: grey !important;
 }
 
 .hidden {
