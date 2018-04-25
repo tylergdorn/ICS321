@@ -94,11 +94,10 @@ function unselect(){
 
 function renderClickable(result){
     $(".clickabletd").off("click");
-    console.log(result);
     for(var id in result.endPoints){
-        console.log(id);
-        $(`#${id}`).addClass('legalLocation');
-        addClickableTile(id, selectedTile);
+        var end = result.endPoints[id]
+        $(`#${end}`).addClass('legalLocation');
+        addClickableTile(end, selectedTile);
     }
     selectedTile = null;
 }

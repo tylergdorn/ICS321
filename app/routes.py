@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, jsonify, request
 from app import app
 from app.forms import LoginForm
 from app.db import db
+from app.db import gamelogic as gl
 from app import exceptions
 
 @app.route('/')
@@ -64,22 +65,22 @@ def move():
     else:
         raise exceptions.InvalidUsage('Use the "start" and "end" parameter with a number', status_code=400)
 
-@app.route('/api/legal', methods=['POST', 'GET'])
+@app.route('/api/legal', methods=['POST'])
 def legal():
     if request.method == 'POST':
         startPoint = request.values.get('start')
         if(startPoint != None):
+            print("here")
+            print(gl.allValidEnds(startPoint))
             return jsonify({
                 'startPoint': startPoint,
-                'endPoints': [0, 1, 2, 3, 4, 5, 6, 7]
+                'endPoints': gl.allValidEnds(startPoint)
             })
         else:
-            raise exceptions.InvalidUsage('Use the "start" parameter with a number', status_code=418)
+            raise exceptions.InvalidUsage('Use the "start" parameter with a number', status_code=400)
         return jsonify(request.values[0])
-    return jsonify({
-        'startPoint': 0,
-        'endPoints': [0, 1, 2, 3, 4, 5, 6, 7]
-        })
+    else:
+        raise exceptions.InvalidUsage('Use the "start" parameter with a number', status_code=400)
 
 @app.errorhandler(exceptions.InvalidUsage)
 def handle_invalid_usage(error):
