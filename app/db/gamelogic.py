@@ -8,15 +8,19 @@ def validMove(start, end):
 
 
 def allValidEnds(startstr):
-    start = int(startstr)
+    """When given a starting pos returns a list of valid ending positions"""
+    start = 0
+    try:
+        start = int(startstr)
+    except ValueError:
+        print("whoops, this happens because reasons")
+        start = math.floor(float(startstr))
     boardState = db.getBoardState()
     print(boardState['tiles'][start])
     startColor = getPieceColor(start, boardState)
     king = boardState['tiles'][start]['king']
     row = math.floor(start / 4)
     column = start % 4 + 1 # whoops i don't feel like changing it everywhere where I use 1 or 4 to 0 or 3 ¯\_(ツ)_/¯
-    print("row: " + str(row) + " column: " + str(column))
-    print("start: " + str(start))
     res = list()
     if(startColor == 'Red' or king):
         table = [1, 1, 1]
@@ -26,7 +30,6 @@ def allValidEnds(startstr):
             table[1] = 0
         if getPieceColor(start + 5, boardState) != 'None':
             table[2] = 0
-        print(table)
         if(row % 2 == 0 and column != 4):
             res.append(start + 4 * table[1])
             res.append(start + 5 * table[2])
@@ -37,7 +40,6 @@ def allValidEnds(startstr):
             res.append(start + 4 * table[1])
         elif(row % 2 == 1 and column == 1):
             res.append(start + 4 * table[1])
-        print(res)
     if(startColor == 'Black' or king):
         table = [-1, -1, -1]
         if getPieceColor(start - 3, boardState) != 'None':
@@ -60,4 +62,5 @@ def allValidEnds(startstr):
     return resu
     
 def getPieceColor(tile, json):
+    """If given the boardstate and the tile you inquire about, gives you the color"""
     return json['tiles'][tile]['color']

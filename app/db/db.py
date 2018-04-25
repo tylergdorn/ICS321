@@ -57,22 +57,28 @@ def getStats():
     temp = cur.fetchall()
     return temp
 
-def updatePosition(start, end):
+def updatePosition(strstart, strend):
     """Moves a piece from start to end"""
-    con = get_db()
-    cur = con.cursor()
-    t = Template("SELECT * FROM BOARD WHERE tile=${tile}")
-    cur.execute(t.substitute(tile = start))
-    temp = cur.fetchall()
-    startTile = temp[0]
-    cur.execute(t.substitute(tile = end))
-    temp2 = cur.fetchall()
-    endTile = temp2[0]
-    print(startTile)
-    print(endTile)
-    if startTile[1] != 'None':
-        if endTile[1] == 'None':
-            print('gj')
+    start = int(strstart)
+    end = int(strend)
+    valid = gl.allValidEnds(start)
+    if end not in valid:
+        return False
+    print("passed")
+    startColor = gl.getPieceColor(start, getBoardState())
+    endColor = gl.getPieceColor(end, getBoardState())
+    print(startColor)
+    print(endColor)
+    if startColor != 'None':
+        if endColor == 'None':
+            con = get_db()
+            cur = con.cursor()
+            t = Template("UPDATE BOARD SET color='${color}' WHERE tile=${tile}")
+            cur.execute(t.substitute(tile = start, color = endColor))
+            cur.execute(t.substitute(tile = end, color = startColor))
+            con.commit()
+            print("moved piece")
+            
 
 
 def clearGame():

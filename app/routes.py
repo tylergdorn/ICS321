@@ -41,6 +41,15 @@ def checkers():
 def get_board():
     return jsonify(db.getBoardState())
 
+@app.route('/api/newgame', methods=['POST'])
+def new_game():
+    if request.method == 'POST':
+        secret = int(request.values.get('secret'))
+        if secret == 420:
+            db.clearGame()
+            return jsonify(True)
+    return jsonify(db.getBoardState())
+
 @app.route('/api/stats', methods=['GET'])
 def stats():
     statsEntry = db.getStats()
@@ -57,7 +66,9 @@ def move():
     if request.method == 'POST':
         start = request.values.get('start')
         end = request.values.get('end')
-        if(start != None and end != None):
+        print("s: " + str(start) + "e: " + str(end))
+        if((start != None) and (end != None)):
+            print("passed check")
             db.updatePosition(start, end)    
             return jsonify(True)
         else:
@@ -71,6 +82,7 @@ def legal():
         startPoint = request.values.get('start')
         if(startPoint != None):
             print("here")
+            print(startPoint)
             print(gl.allValidEnds(startPoint))
             return jsonify({
                 'startPoint': startPoint,
