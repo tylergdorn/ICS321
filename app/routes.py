@@ -42,19 +42,23 @@ def get_board():
 
 @app.route('/api/stats', methods=['GET'])
 def stats():
-    db.updatePosition(1, 19)
-    return jsonify(db.getStats())
+    statsEntry = db.getStats()
+    retJson = {
+        'redWins': statsEntry[0][0],
+        'blackWins': statsEntry[0][1],
+        'gameOver': (statsEntry[0][2] == 1),
+        'turn': statsEntry[0][3]
+    }
+    return jsonify(retJson)
 
-@app.route('/api/move', methods=['POST', 'GET'])
+@app.route('/api/move', methods=['POST'])
 def move():
-    db.clearGame()
-    return jsonify("{'a':'a'}")
+    return(jsonify(True))
 
 @app.route('/api/legal', methods=['POST', 'GET'])
 def legal():
     if request.method == 'POST':
         startPoint = request.values.get('start')
-        print(startPoint)
         if(startPoint != None):
             return jsonify({
                 'startPoint': startPoint,

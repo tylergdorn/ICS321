@@ -30,3 +30,7 @@ td {
 .far {
   color: #DDDDDD;
 }
+
+.legalLocation {
+  background-color: lightslategray !important;
+}

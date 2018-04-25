@@ -36,6 +36,7 @@ def new_game():
     """Starts a new game, and resets the db"""
     con = get_db()
     cur = con.cursor()
+    # cur.execute("UPDATE ")
     for i in range(0, 32):
         template = Template('INSERT INTO BOARD VALUES (${i}, \'${color}\', 0)')
         color = 'Black'
