@@ -3,6 +3,7 @@
 {% block scripts %}
     <script type=text/javascript src="{{ url_for('static', filename='checkers.js')}}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='checkers.css') }}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 {% endblock %}
 
 {% block content %}
@@ -11,7 +12,9 @@
         <tr>
             {% for j in range(0, 8) %}
                 {% if (i + j) % 2 != 0 %}
-                    <td class="clickabletd" id="{{ ((i * 8 + j) // 2) }}"></td>
+                    <td class="clickabletd" id="{{ ((i * 8 + j) // 2) }}">
+                        <i class="piece"></i>
+                    </td>
                 {% else %}
                     <td></td>
                 {% endif %}

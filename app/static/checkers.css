@@ -14,3 +14,19 @@ table tr td {
 .selected {
   color: red;
 }
+
+.hidden {
+  display: none !important;
+}
+
+td {
+  text-align: center;
+}
+
+.fas {
+  color: #DD1515
+}
+
+.far {
+  color: #DDDDDD;
+}
