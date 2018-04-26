@@ -101,6 +101,7 @@ function renderClickable(result){
         addClickableTile(end, selectedTile);
     }
     selectedTile = null;
+    console.log(result.endPoints);
 }
 
 function addClickableTile(id, startId){

@@ -50,6 +50,14 @@ def new_game():
             return jsonify(True)
     return jsonify(db.getBoardState())
 
+@app.route('/api/jump', methods=['POST'])
+def jump():
+    if request.method == 'POST':
+        start = int(request.values.get('start'))
+        end = int(request.values.get('end'))
+        db.jump(start, end)
+    return jsonify(db.getBoardState())
+
 @app.route('/api/stats', methods=['GET'])
 def stats():
     statsEntry = db.getStats()
@@ -81,12 +89,13 @@ def legal():
     if request.method == 'POST':
         startPoint = request.values.get('start')
         if(startPoint != ''):
-            print("here")
-            print(startPoint)
-            print(gl.allValidEnds(startPoint))
+            temp = gl.validMoves(startPoint)
+            combined = []
+            combined.extend(temp['steps'])
+            combined.extend(temp['hops'])
             return jsonify({
                 'startPoint': startPoint,
-                'endPoints': gl.allValidEnds(startPoint)
+                'endPoints': combined
             })
         else:
             raise exceptions.InvalidUsage('Use the "start" parameter with a number', status_code=400)

@@ -1,6 +1,7 @@
 import sqlite3
 
 from app.db import db
+from app.db import gamelogic
 
 # conn.execute("SELECT TABLES LIKE 'STATS")
 # result = conn.fetchone()
