@@ -21,8 +21,9 @@ function boardState(){
 function renderBoardState(json){
     for (item in json.tiles){
         const color = json.tiles[item].color;
-        console.log(`current turn ${currentTurn} color ${color}`);
+        // console.log(`current turn ${currentTurn} color ${color}`);
         if(currentTurn == color){
+            $(`#${item}`).unbind('click');
             $(`#${item}`).click(selected);
         }
         renderTile(item, color, json.tiles[item].king)
@@ -35,9 +36,7 @@ function getCurrentTurn(){
 }
 
 function setCurrentTurn(result){
-    console.log(currentTurn);
     currentTurn = result.turn;
-    console.log(currentTurn);
 }
 
 // renders a tile properly
@@ -71,6 +70,8 @@ function renderTile(tile, color, king){
 // the on click when you choose a tile
 function selected(){
     selectedTile = $(this).attr("id");
+    console.log(`selected tile id: ${selectedTile} classes: ${$(this).attr("class")}`);
+    // debugger;
     $(this).addClass("selected");
     $.ajax({url: $SCRIPT_ROOT + '/api/legal', 
     method:"POST",
@@ -85,7 +86,7 @@ function selected(){
 
 function unselect(){
     $(".clickabletd").off("click");
-    $(this).removeClass('selected');
+    $('.selected').removeClass('selected');
     $('.legalLocation').removeClass('legalLocation');
     boardState()
 }
@@ -109,7 +110,12 @@ function addClickableTile(id, startId){
 }
 
 function movePiece(id, startId){
-    $('.selected').removeClass('selected');
+    console.log(`moving piece at ${startId} to ${id}`);
+    if(startId == null){
+        unselect();
+        debugger;
+        startId = $('.selected')[0].attr('id');
+    }
     $('.legalLocation').removeClass('legalLocation');
     selectedTile = null;
     $.ajax({url: $SCRIPT_ROOT + '/api/move', 
@@ -121,6 +127,7 @@ function movePiece(id, startId){
     success: function(result){
         boardState();
     }});
+    $('.selected').removeClass('selected');
 }
 
 // main

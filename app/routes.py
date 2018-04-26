@@ -67,7 +67,7 @@ def move():
         start = request.values.get('start')
         end = request.values.get('end')
         print("s: " + str(start) + "e: " + str(end))
-        if((start != None) and (end != None)):
+        if((start != '') and (end != '')):
             print("passed check")
             db.updatePosition(start, end)    
             return jsonify(True)
@@ -80,7 +80,7 @@ def move():
 def legal():
     if request.method == 'POST':
         startPoint = request.values.get('start')
-        if(startPoint != None):
+        if(startPoint != ''):
             print("here")
             print(startPoint)
             print(gl.allValidEnds(startPoint))
