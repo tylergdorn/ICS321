@@ -102,6 +102,8 @@ def validMoves(sstart):
     start = int(sstart)
     hops = validHops(start)
     steps = allValidEnds(start)
+    startColor = getPieceColor(start)
+    midColor = ''
     res = hops[:]
     for tile in hops:
         mid = 0
@@ -110,7 +112,10 @@ def validMoves(sstart):
             mid = math.ceil((tile + start) / 2)
         else:
             mid = math.floor((tile + start) / 2)
+        midColor = getPieceColor(mid)
         if mid in steps:
+            res.remove(tile)
+        elif midColor == startColor:
             res.remove(tile)
     return {
         'hops': res,

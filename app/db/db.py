@@ -104,6 +104,7 @@ def jump(start, end):
     cur.execute(t.substitute(co = 'None', ti = start))
     # TODO: MAKE THIS CHECK IF YOU CAN JUMP MORE, THEN CHANGE TURN
     con.commit()
+    changeTurn()
 
 def changeTurn():
     con = get_db()

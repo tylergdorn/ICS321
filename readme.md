@@ -3,7 +3,7 @@
 ## Instruction Steps
 
 1. Download the Repository
-1. Download an Oracle client, and edit oraclesux.bat to reflect your oracle dir
+1. Download an Oracle client, and edit oracle.bat to reflect your oracle dir
 1. Create Python Virtual Environment
     * Varies in environment
 1. In virtual Environment, run `pip install -r requirements.txt` to download requriements

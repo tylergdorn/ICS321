@@ -32,7 +32,8 @@ def login():
 
 @app.route('/statistics')
 def statistics():
-    return render_template('statistics.html', title='Statistics')
+    return render_template('statistics.html', title='Statistics', stats=db.getStats())
+
 @app.route('/checkers')
 def checkers():
     return render_template('checkers.html', title='checc')
@@ -45,7 +46,7 @@ def get_board():
 def new_game():
     if request.method == 'POST':
         secret = int(request.values.get('secret'))
-        if secret == 420:
+        if secret == 420: #HAH ITS THE WEED NUMBER
             db.clearGame()
             return jsonify(True)
     return jsonify(db.getBoardState())

@@ -34,3 +34,8 @@ td {
 .legalLocation {
   background-color: lightslategray !important;
 }
+
+#content{
+  display: flex;
+  justify-content: center
+}

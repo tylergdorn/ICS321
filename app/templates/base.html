@@ -13,6 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}"/>
         <script type=text/javascript>
             $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
         </script>
@@ -21,22 +22,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <div>
+        <div id="menu">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('statistics') }}">Statistics</a>
             <a href="{{ url_for('checkers') }}">Checkers</a>
         </div>
         <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
+        <div id="content">
         {% block content %}{% endblock %}
-
+        </div>
     </body>
 </html>
