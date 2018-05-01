@@ -36,6 +36,8 @@ function getCurrentTurn(){
 }
 
 function setCurrentTurn(result){
+    $('#team').text(result.turn);
+    $('#team').css("color", result.turn);
     currentTurn = result.turn;
 }
 
@@ -114,7 +116,6 @@ function movePiece(id, startId){
     console.log(`moving piece at ${startId} to ${id}`);
     if(startId == null){
         unselect();
-        debugger;
         startId = $('.selected')[0].attr('id');
     }
     $('.legalLocation').removeClass('legalLocation');

@@ -24,7 +24,7 @@ td {
 }
 
 .fas {
-  color: #DD1515
+  color: #DD1515;
 }
 
 .far {
@@ -35,7 +35,11 @@ td {
   background-color: lightslategray !important;
 }
 
-#content{
+#content {
   display: flex;
-  justify-content: center
+  justify-content: center;
+}
+
+h3 {
+  text-align: center;
 }
