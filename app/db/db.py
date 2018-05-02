@@ -80,11 +80,24 @@ def updatePosition(strstart, strend):
                 con = get_db()
                 changeTurn()
                 print("steppin!")
-                cur = con.cursor()
-                t = Template("UPDATE BOARD SET color='${color}' WHERE tile=${tile}")
-                cur.execute(t.substitute(tile = start, color = endColor))
-                cur.execute(t.substitute(tile = end, color = startColor))
-                con.commit()
+                movePiece(start, end)
+                gl.shouldbeKing(end)
+
+def movePiece(start, end):
+    """moves a piece from start to end in the database"""
+    print('this is being called')
+    con = get_db()
+    cur = con.cursor()
+    startColor = gl.getPieceColor(start)
+    endColor = gl.getPieceColor(end)
+    startKing = gl.getKing(start)
+    endKing = gl.getKing(end)
+    sKing = 1 if startKing else 0
+    eKing = 1 if endKing else 0 #these last four lines get the king status, and translate it to 1/0 since oracle doesn't like true/false
+    t = Template("UPDATE BOARD SET color='${color}', king=${king} WHERE tile=${tile}")
+    cur.execute(t.substitute(tile = start, color = endColor, king = eKing))
+    cur.execute(t.substitute(tile = end, color = startColor, king = sKing))
+    con.commit()
 
 def jump(start, end):
     """executes a hop over one piece"""
@@ -100,10 +113,10 @@ def jump(start, end):
     print(midId)
     t = Template("UPDATE BOARD SET color='${co}' WHERE tile=${ti}")
     cur.execute(t.substitute(co = 'None', ti = midId))
-    cur.execute(t.substitute(co = gl.getPieceColor(start), ti = end))
-    cur.execute(t.substitute(co = 'None', ti = start))
+    movePiece(start, end)
     # TODO: MAKE THIS CHECK IF YOU CAN JUMP MORE, THEN CHANGE TURN
     con.commit()
+    gl.shouldbeKing(end)
     changeTurn()
 
 def changeTurn():
@@ -139,3 +152,12 @@ def init():
         if command != '': #this is because it thinks there is another command after the last ';'
             cur.execute(command) 
     conn.commit()
+
+def kingPiece(tile):
+    """Makes piece at tile a king"""
+    con = get_db()
+    cur = con.cursor()
+    t = Template("UPDATE BOARD SET king=1 WHERE tile=${tile}")
+    print('kinged')
+    cur.execute(t.substitute(tile=tile))
+    con.commit()

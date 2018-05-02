@@ -19,9 +19,8 @@ def allValidEnds(startstr):
     column = start % 4 + 1 # whoops i don't feel like changing it everywhere where I use 1 or 4 to 0 or 3 ¯\_(ツ)_/¯
     res = list()
 
-    # print('row: ' + str(row) + ' column: ' + str(column))
     # start of the big horrible logic I can't think of how to make any nicer
-    if(startColor == 'Red' or king):
+    if((not king and startColor == 'Red') or (king and start < 28)): # if it's not a king, it doesn't matter, if it is, we need to care if it's not in the end row
         # this generates a table for fun math
         table = [1, 1, 1]
         if getPieceColor(start + 3) != 'None':
@@ -41,7 +40,7 @@ def allValidEnds(startstr):
         elif(row % 2 == 1 and column == 1):
             res.append(start + 4 * table[1])
             
-    if(startColor == 'Black' or king):
+    if((not king and startColor == 'Black') or (king and start > 3)):
         # this generates a table for fun math
         table = [-1, -1, -1]
         if getPieceColor(start - 3) != 'None':
@@ -50,7 +49,6 @@ def allValidEnds(startstr):
             table[1] = 0
         if getPieceColor(start - 5) != 'None':
             table[2] = 0
-        # print(table)
 
         if(row % 2 == 0 and column != 4):
             res.append(start + 3 * table[0])
@@ -74,8 +72,8 @@ def validHops(sstart):
     sCol = start % 4
     moves = []
     res = []
-    if(sColor == 'Red' or king):
-        if sRow <= 6:
+    if((not king and sColor == 'Red') or (king and start < 24)): 
+        if sRow <= 5:
             if sCol == 0:
                 moves.append(colRowToId(sRow + 2, sCol + 1))
             elif sCol == 3:
@@ -83,7 +81,7 @@ def validHops(sstart):
             else:
                 moves.append(colRowToId(sRow + 2, sCol + 1))
                 moves.append(colRowToId(sRow + 2, sCol - 1))
-    if(sColor == 'Black' or king):
+    if((not king and sColor == 'Black') or (king and start > 7)):
         if sRow >= 1:
             if sCol == 0:
                 moves.append(colRowToId(sRow - 2, sCol + 1))
@@ -135,3 +133,13 @@ def getKing(tile):
 def colRowToId(row, column):
     """when given column and row returns id"""
     return (row * 4) + column
+
+def shouldbeKing(endTile):
+    """Checks if the piece at the endtile should become a king and updates db"""
+    color = getPieceColor(endTile)
+    print("checking if tile: " + str(endTile) + "with color: " + str(color))
+    if color == 'Black' and endTile < 4: # if a black piece is in the first row
+        db.kingPiece(endTile)
+    elif color == 'Red' and endTile > 28: # if a red piece is in the end row
+        db.kingPiece(endTile)
+    
