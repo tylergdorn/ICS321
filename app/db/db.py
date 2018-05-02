@@ -12,7 +12,7 @@ def getBoardState():
     cursor.execute("SELECT * FROM BOARD ORDER BY tile") # get all the data from db
     entries = cursor.fetchall()
     if len(entries) == 0: # if there isn't any entries, give sample data
-        new_game()
+        new_game('')
         return getBoardState()
     jsonData = {}
     entityArray = []
@@ -33,10 +33,19 @@ def get_db():
     file = open('server.txt')
     return cx_Oracle.connect(file.read())
 
-def new_game():
-    """Starts a new game, and resets the db"""
+def new_game(team):
+    """Starts a new game, and resets the db. Takes team that won"""
     con = get_db()
     cur = con.cursor()
+    stats = getStats()
+    clearGame()
+    t = Template('UPDATE STATS SET ${team}WINS=${num}')
+    if(team == 'Red'):
+        wins = stats[0][0]
+        cur.execute(t.substitute(team = 'RED', num = wins + 1))
+    elif(team == 'Black'):
+        wins = stats[0][1]
+        cur.execute(t.substitute(team = 'BLACK', num = wins + 1))
     # cur.execute("UPDATE ")
     for i in range(0, 32):
         template = Template('INSERT INTO BOARD VALUES (${i}, \'${color}\', 0)')
@@ -117,6 +126,7 @@ def jump(start, end):
     # TODO: MAKE THIS CHECK IF YOU CAN JUMP MORE, THEN CHANGE TURN
     con.commit()
     gl.shouldbeKing(end)
+    gl.isOver()
     changeTurn()
 
 def changeTurn():

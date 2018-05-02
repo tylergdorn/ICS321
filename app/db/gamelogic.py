@@ -143,3 +143,17 @@ def shouldbeKing(endTile):
     elif color == 'Red' and endTile > 28: # if a red piece is in the end row
         db.kingPiece(endTile)
     
+def isOver():
+    """checks if the game is over"""
+    red = 0
+    black = 0
+    data = db.getBoardState()
+    for item in data['tiles']:
+        if(item['color'] == 'Red'):
+            red += 1
+        elif(item['color'] == 'Black'):
+            black += 1
+    if(red == 0):
+        db.new_game('Black')
+    if(black == 0):
+        db.new_game('Red')
