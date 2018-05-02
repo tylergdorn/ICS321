@@ -107,6 +107,7 @@ def jump(start, end):
     changeTurn()
 
 def changeTurn():
+    """swaps the turn"""
     con = get_db()
     cur = con.cursor()
     startColor = cur.execute("SELECT turn FROM STATS").fetchall()[0][0]
@@ -126,3 +127,15 @@ def clearGame():
     conn.commit()
     print("Deleted All tile info from Board")
 
+def init():
+    """Initializes the db"""
+    conn = get_db()
+    cur = conn.cursor()
+    f = open('app/db/init.sql', 'r')
+    text = f.read()
+    f.close()
+    commands = text.split(';')
+    for command in commands:
+        if command != '': #this is because it thinks there is another command after the last ';'
+            cur.execute(command) 
+    conn.commit()
