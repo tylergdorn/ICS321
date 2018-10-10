@@ -1,7 +1,7 @@
 from flask import jsonify
 from string import Template
 import json
-import cx_Oracle
+import sqlite3
 from app.db import gamelogic as gl
 import math
 import json
@@ -26,12 +26,13 @@ def getBoardState():
             entityData['king'] = True
         entityArray.append(entityData) # add our built json to the array
     jsonData['tiles'] = entityArray
+    conn.commit()
+    conn.close()
     return jsonData # return our built json
 
 def get_db():
     """Returns a database connection"""
-    file = open('server.txt')
-    return cx_Oracle.connect(file.read())
+    return sqlite3.connect('db.db', timeout=1)
 
 def new_game(team):
     """Starts a new game, and resets the db. Takes team that won"""
@@ -65,6 +66,7 @@ def getStats():
     cur = con.cursor()
     cur.execute("SELECT * FROM STATS")
     temp = cur.fetchall()
+    con.close()
     return temp
 
 def updatePosition(strstart, strend):
@@ -86,7 +88,6 @@ def updatePosition(strstart, strend):
                 jump(start, end)
                 print("hopping from " + str(start) + " to " + str(end))
             else:
-                con = get_db()
                 changeTurn()
                 print("steppin!")
                 movePiece(start, end)
@@ -107,6 +108,7 @@ def movePiece(start, end):
     cur.execute(t.substitute(tile = start, color = endColor, king = eKing))
     cur.execute(t.substitute(tile = end, color = startColor, king = sKing))
     con.commit()
+    con.close()
 
 def jump(start, end):
     """executes a hop over one piece"""
@@ -122,9 +124,10 @@ def jump(start, end):
     print(midId)
     t = Template("UPDATE BOARD SET color='${co}' WHERE tile=${ti}")
     cur.execute(t.substitute(co = 'None', ti = midId))
+    con.commit()
     movePiece(start, end)
     # TODO: MAKE THIS CHECK IF YOU CAN JUMP MORE, THEN CHANGE TURN
-    con.commit()
+    con.close()
     gl.shouldbeKing(end)
     gl.isOver()
     changeTurn()
@@ -141,6 +144,7 @@ def changeTurn():
     t = Template("UPDATE STATS SET turn='${newColor}' WHERE turn='${startColor}'")
     cur.execute(t.substitute(newColor = newcolor, startColor = startColor))
     con.commit()
+    con.close()
 
 def clearGame():
     """Clears everything out of the board table"""
@@ -148,6 +152,7 @@ def clearGame():
     cur = conn.cursor()
     cur.execute("DELETE FROM BOARD")
     conn.commit()
+    conn.close()
     print("Deleted All tile info from Board")
 
 def init():
@@ -162,6 +167,7 @@ def init():
         if command != '': #this is because it thinks there is another command after the last ';'
             cur.execute(command) 
     conn.commit()
+    conn.close()
 
 def kingPiece(tile):
     """Makes piece at tile a king"""
@@ -171,3 +177,4 @@ def kingPiece(tile):
     print('kinged')
     cur.execute(t.substitute(tile=tile))
     con.commit()
+    con.close()
